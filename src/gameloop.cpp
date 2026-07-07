@@ -473,11 +473,17 @@ void	PlayShortMovie(GG_Movie* movie)
 		Render::ShowFrame();
 
 		duration -= dt;
-		
-		// Sleep approximately until the next frame is due.
-		int	SleepTime = 13 - dt;
-		if (SleepTime > 0) {
-			Timer::Sleep(SleepTime);
+
+		// Sleep approximately until the next frame is due -- but only
+		// when vsync isn't already pacing us (sleep + vsync block
+		// drops movies to ~30fps).
+		bool	vsync = true;
+		if (Config::GetValue("VSync")) vsync = Config::GetBool("VSync");
+		if (!vsync) {
+			int	SleepTime = 13 - dt;
+			if (SleepTime > 0) {
+				Timer::Sleep(SleepTime);
+			}
 		}
 	}
 
@@ -1019,12 +1025,17 @@ void	Update()
 			MovieMode = false;
 		}
 
-		// Sleep a little.
-		int	SleepTime = 13 - DeltaTicks;
-		if (SleepTime > 0) {
-			Timer::Sleep(SleepTime);
+		// Sleep a little -- but only when vsync isn't already pacing
+		// us (sleep + vsync block drops movies to ~30fps).
+		bool	vsync = true;
+		if (Config::GetValue("VSync")) vsync = Config::GetBool("VSync");
+		if (!vsync) {
+			int	SleepTime = 13 - DeltaTicks;
+			if (SleepTime > 0) {
+				Timer::Sleep(SleepTime);
+			}
 		}
-		
+
 		return;
 	}
 

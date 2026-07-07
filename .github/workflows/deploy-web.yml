@@ -24,6 +24,17 @@ jobs:
         uses: mymindstorm/setup-emsdk@v14
         with:
           version: 4.0.12
+          # Cache the installed emsdk toolchain across runs.
+          actions-cache-folder: emsdk-cache
+
+      - name: Cache Emscripten ports
+        uses: actions/cache@v4
+        with:
+          # Built SDL2 / SDL2_mixer / vorbis / ogg ports live here;
+          # caching them skips the first-build port compile.
+          path: ${{ env.EMSDK }}/upstream/emscripten/cache
+          key: emcache-4.0.12-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: emcache-4.0.12-
 
       - name: Configure
         run: emcmake cmake -S . -B build-web -DCMAKE_BUILD_TYPE=Release
