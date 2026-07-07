@@ -2,6 +2,8 @@
 # Project specific
 #
 
+build/
+build-web/
 data/files-used.txt
 data/gamegui.log
 data/hash_keys.txt

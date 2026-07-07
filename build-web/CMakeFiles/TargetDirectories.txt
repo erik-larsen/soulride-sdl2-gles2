@@ -1,5 +1,0 @@
-/Users/larsens/Github/soulride-sdl2-gles2/build-web/CMakeFiles/lua.dir
-/Users/larsens/Github/soulride-sdl2-gles2/build-web/CMakeFiles/gamegui.dir
-/Users/larsens/Github/soulride-sdl2-gles2/build-web/CMakeFiles/soulride.dir
-/Users/larsens/Github/soulride-sdl2-gles2/build-web/CMakeFiles/edit_cache.dir
-/Users/larsens/Github/soulride-sdl2-gles2/build-web/CMakeFiles/rebuild_cache.dir
