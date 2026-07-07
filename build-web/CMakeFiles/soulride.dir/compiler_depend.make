@@ -1642,6 +1642,7 @@ CMakeFiles/soulride.dir/src/game.cpp.o: /Users/larsens/Github/soulride-sdl2-gles
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/cstdint \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/limits \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/math.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdbool.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stddef.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdio.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdlib.h \
@@ -1652,9 +1653,19 @@ CMakeFiles/soulride.dir/src/game.cpp.o: /Users/larsens/Github/soulride-sdl2-gles
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/stdlib.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/string.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/sys/stat.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_asm.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_js.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_macros.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_types.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/emscripten.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/promise.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/version.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/wget.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/endian.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/features.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/math.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdbool.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stddef.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdint.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdio.h \
@@ -1672,6 +1683,7 @@ CMakeFiles/soulride.dir/src/game.cpp.o: /Users/larsens/Github/soulride-sdl2-gles
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_ptrdiff_t.h \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_size_t.h \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_wchar_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdbool.h \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stddef.h \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdint.h \
   /Users/larsens/Github/soulride-sdl2-gles2/data/gui/guidefs.h \
@@ -9030,6 +9042,7 @@ CMakeFiles/soulride.dir/src/text.cpp.o: /Users/larsens/Github/soulride-sdl2-gles
   /Users/larsens/Github/soulride-sdl2-gles2/src/view.hpp
 
 CMakeFiles/soulride.dir/src/timer.cpp.o: /Users/larsens/Github/soulride-sdl2-gles2/src/timer.cpp \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/alloca.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/alltypes.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/posix.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/stdint.h \
@@ -9040,13 +9053,27 @@ CMakeFiles/soulride.dir/src/timer.cpp.o: /Users/larsens/Github/soulride-sdl2-gle
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__configuration/compiler.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__configuration/language.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__configuration/platform.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdbool.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stddef.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdio.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_asm.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_js.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_macros.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_types.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/emscripten.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/promise.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/version.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/wget.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/endian.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/features.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdbool.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stddef.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdint.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdio.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdlib.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/sys/select.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/sys/time.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/sys/types.h \
@@ -9059,6 +9086,7 @@ CMakeFiles/soulride.dir/src/timer.cpp.o: /Users/larsens/Github/soulride-sdl2-gle
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_ptrdiff_t.h \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_size_t.h \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_wchar_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdbool.h \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stddef.h \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdint.h \
   /Users/larsens/Github/soulride-sdl2-gles2/src/timer.hpp \
@@ -13561,28 +13589,6 @@ CMakeFiles/soulride.dir/src/weather.cpp.o: /Users/larsens/Github/soulride-sdl2-g
 
 /Users/larsens/Github/soulride-sdl2-gles2/src/mdynamic.cpp:
 
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__vector/container_traits.h:
-
-/Users/larsens/Github/soulride-sdl2-gles2/src/config.cpp:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__iterator/move_iterator.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdbool.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/version.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__utility/is_pointer_in_range.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_macros.h:
-
-/Users/larsens/Github/soulride-sdl2-gles2/src/boarder.cpp:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__algorithm/pop_heap.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_js.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdbool.h:
-
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/new:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/cstddef:
@@ -13639,21 +13645,7 @@ CMakeFiles/soulride.dir/src/weather.cpp.o: /Users/larsens/Github/soulride-sdl2-g
 
 /Users/larsens/Github/soulride-sdl2-gles2/src/linuxsound.cpp:
 
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__iterator/unreachable_sentinel.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/SDL2/SDL_platform.h:
-
-/Users/larsens/Github/soulride-sdl2-gles2/src/gameloop.cpp:
-
-/Users/larsens/Github/soulride-sdl2-gles2/src/geometry.cpp:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/promise.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__config:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__mbstate_t.h:
-
-/Users/larsens/Github/emsdk/upstream/lib/clang/22/include/inttypes.h:
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdbool.h:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/inttypes.h:
 
@@ -13676,6 +13668,12 @@ CMakeFiles/soulride.dir/src/weather.cpp.o: /Users/larsens/Github/soulride-sdl2-g
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__compare/three_way_comparable.h:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/ctype.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__config:
+
+/Users/larsens/Github/emsdk/upstream/lib/clang/22/include/inttypes.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__mbstate_t.h:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__type_traits/is_bounded_array.h:
 
@@ -13714,12 +13712,6 @@ CMakeFiles/soulride.dir/src/weather.cpp.o: /Users/larsens/Github/soulride-sdl2-g
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__algorithm/is_heap_until.h:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/SDL2/SDL_mutex.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__thread/poll_with_backoff.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__ranges/enable_view.h:
-
-/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__undef_macros:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__concepts/boolean_testable.h:
 
@@ -13789,6 +13781,16 @@ CMakeFiles/soulride.dir/src/weather.cpp.o: /Users/larsens/Github/soulride-sdl2-g
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/float.h:
 
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/promise.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__iterator/unreachable_sentinel.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/SDL2/SDL_platform.h:
+
+/Users/larsens/Github/soulride-sdl2-gles2/src/gameloop.cpp:
+
+/Users/larsens/Github/soulride-sdl2-gles2/src/geometry.cpp:
+
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__tuple/make_tuple_types.h:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__algorithm/copy_move_common.h:
@@ -13811,6 +13813,8 @@ CMakeFiles/soulride.dir/src/weather.cpp.o: /Users/larsens/Github/soulride-sdl2-g
 
 /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/float.h:
 
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__vector/container_traits.h:
+
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/inttypes.h:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__exception/nested_exception.h:
@@ -13827,6 +13831,12 @@ CMakeFiles/soulride.dir/src/weather.cpp.o: /Users/larsens/Github/soulride-sdl2-g
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/sys/select.h:
 
+/Users/larsens/Github/soulride-sdl2-gles2/src/config.cpp:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__iterator/move_iterator.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdbool.h:
+
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__vector/vector_bool.h:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__algorithm/sort_heap.h:
@@ -13834,6 +13844,24 @@ CMakeFiles/soulride.dir/src/weather.cpp.o: /Users/larsens/Github/soulride-sdl2-g
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/wchar.h:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/endian.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/version.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__utility/is_pointer_in_range.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_macros.h:
+
+/Users/larsens/Github/soulride-sdl2-gles2/src/boarder.cpp:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__algorithm/pop_heap.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_js.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__thread/poll_with_backoff.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__ranges/enable_view.h:
+
+/Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__undef_macros:
 
 /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/assert.h:
 

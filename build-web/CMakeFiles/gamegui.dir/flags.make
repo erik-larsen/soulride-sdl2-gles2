@@ -6,5 +6,5 @@ CXX_DEFINES = -DLINUX=1
 
 CXX_INCLUDES = @CMakeFiles/gamegui.dir/includes_CXX.rsp
 
-CXX_FLAGS = -O3 -DNDEBUG -std=gnu++98 -sUSE_SDL=2 -sUSE_SDL_MIXER=2 -fexceptions
+CXX_FLAGS = -O3 -DNDEBUG -std=gnu++98 -sUSE_SDL=2 -sUSE_SDL_MIXER=2 -fwasm-exceptions
 

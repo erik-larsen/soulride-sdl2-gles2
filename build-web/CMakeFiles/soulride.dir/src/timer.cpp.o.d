@@ -32,4 +32,20 @@ CMakeFiles/soulride.dir/src/timer.cpp.o: \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/sys/types.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/endian.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/unistd.h \
-  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/posix.h
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/posix.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/emscripten.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_asm.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_macros.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_types.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdbool.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdbool.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdbool.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_js.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/promise.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/alloca.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/wget.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/version.h

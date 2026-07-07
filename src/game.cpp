@@ -31,6 +31,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+extern bool	g_WebInsideMainLoopTick;	// defined in linuxmain.cpp
+#endif
 #include "boarder.hpp"
 #include "main.hpp"
 #include "game.hpp"
@@ -502,6 +507,13 @@ LoadMountain(const char* MountainName)
 			if (cache_modtime > modtime) {
 				Write = false;
 			}
+#ifdef __EMSCRIPTEN__
+			// All preloaded MEMFS files share one timestamp, so the
+			// mtime comparison is meaningless; a shipped cache is
+			// always consistent with its .srt (the version byte is
+			// still checked below).
+			Write = false;
+#endif
 		}
 
 		static int	CACHE_FILE_VERSION = 0;
@@ -594,6 +606,18 @@ LoadMountain(const char* MountainName)
 void	LoadingMessage(const char* message)
 // Displays a message in the loading movie.
 {
+	// Log stage timings, for keeping an eye on load performance.
+	static int	LastStageTicks = 0;
+	int	ticks = Timer::GetTicks();
+	Console::Printf("load stage '%s' (previous stage took %d ms)\n", message, ticks - LastStageTicks);
+#ifdef __EMSCRIPTEN__
+	// Also record in JS for easy inspection: Module.srStages
+	EM_ASM({
+		(Module.srStages = Module.srStages || []).push([UTF8ToString($0), $1]);
+	}, message, ticks - LastStageTicks);
+#endif
+	LastStageTicks = ticks;
+
 	if (LoadingPlayer) {
 		LoadingPlayer->getMovie()->setActorText(GGID_LOADINGMESSAGE, (char*) message);
 		LoadingTick(true);
@@ -615,7 +639,19 @@ void	LoadingTick(bool ForceUpdate)
 	if (dt > 200) dt = 200;
 	LastFrameTicks = ticks;
 	
-	if (LoadingPlayer) {
+#ifdef __EMSCRIPTEN__
+	// In a hidden tab, skip both rendering and yielding: swaps and
+	// timers are throttled to a crawl there, and nothing is visible
+	// anyway -- just crunch through the load at full speed.
+	bool	web_skip_present = ::g_WebInsideMainLoopTick ||
+		EM_ASM_INT({
+			return (typeof document !== 'undefined' && document.visibilityState === 'hidden') ? 1 : 0;
+		}) != 0;
+#else
+	bool	web_skip_present = false;
+#endif
+
+	if (LoadingPlayer && !web_skip_present) {
 		// Do a frame of the movie.
 		glViewport(0, 0, Render::GetWindowWidth(), Render::GetWindowHeight());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -625,6 +661,22 @@ void	LoadingTick(bool ForceUpdate)
 //		OGL::SwapBuffers(GetDC(Main::GetGameWindow()));
 		Render::ShowFrame();
 	}
+
+#ifdef __EMSCRIPTEN__
+	// Yield to the browser so the frame above actually presents and
+	// the page stays responsive through the long synchronous load.
+	// Not legal inside the main loop callback (in-game mountain
+	// switches load synchronously, as before).  Yields can cost tens
+	// of ms each, so cap them at ~5/sec.
+	if (!::g_WebInsideMainLoopTick && !web_skip_present) {
+		static int	LastYieldTicks = 0;
+		if (ticks - LastYieldTicks >= 200) {
+			LastYieldTicks = ticks;
+			EM_ASM({ if (Module.srLoadingFrame) Module.srLoadingFrame(); });
+			emscripten_sleep(0);
+		}
+	}
+#endif
 }
 
 

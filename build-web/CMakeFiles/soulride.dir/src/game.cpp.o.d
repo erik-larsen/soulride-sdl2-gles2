@@ -32,6 +32,22 @@ CMakeFiles/soulride.dir/src/game.cpp.o: \
   /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdint.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdint.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/stdint.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/emscripten.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_asm.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_macros.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_types.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdbool.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdbool.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdbool.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/em_js.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/promise.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/alloca.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/wget.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/emscripten/version.h \
   /Users/larsens/Github/soulride-sdl2-gles2/src/boarder.hpp \
   /Users/larsens/Github/soulride-sdl2-gles2/src/geometry.hpp \
   /Users/larsens/Github/soulride-sdl2-gles2/src/types.hpp \
@@ -152,10 +168,6 @@ CMakeFiles/soulride.dir/src/game.cpp.o: \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__math/rounding_functions.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__math/traits.h \
   /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__math/trigonometric_functions.h \
-  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/stdlib.h \
-  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdlib.h \
-  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdlib.h \
-  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/alloca.h \
   /Users/larsens/Github/soulride-sdl2-gles2/src/model.hpp \
   /Users/larsens/Github/soulride-sdl2-gles2/src/render.hpp \
   /Users/larsens/Github/soulride-sdl2-gles2/src/error.hpp \

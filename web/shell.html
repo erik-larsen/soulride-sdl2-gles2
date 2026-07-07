@@ -228,7 +228,16 @@
       },
 
       print: function (text) { console.log(text); },
-      printErr: function (text) { console.warn(text); }
+      printErr: function (text) { console.warn(text); },
+
+      // Called from the game's LoadingTick once it starts presenting
+      // its own loading screen on the canvas.
+      srLoadingFrame: function () {
+        if (!Module.__started) {
+          Module.__started = true;
+          loaderEl.className = 'done';
+        }
+      }
     };
 
     // The game calls emscripten_set_main_loop after startup; first

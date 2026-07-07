@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = @CMakeFiles/lua.dir/includes_C.rsp
 
-C_FLAGS = -O3 -DNDEBUG -sUSE_SDL=2 -sUSE_SDL_MIXER=2 -fexceptions
+C_FLAGS = -O3 -DNDEBUG -sUSE_SDL=2 -sUSE_SDL_MIXER=2 -fwasm-exceptions
 

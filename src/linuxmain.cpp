@@ -80,10 +80,17 @@ static void	MeasureMouseSpeed()
 
 
 #ifdef __EMSCRIPTEN__
+// True while inside the browser-driven main loop callback.  Asyncify
+// yields (emscripten_sleep) are only legal OUTSIDE the callback, i.e.
+// during the long synchronous startup; Timer::Sleep and
+// Game::LoadingTick check this.
+bool	g_WebInsideMainLoopTick = false;
+
 static void	MainLoopIteration()
 // One iteration of the game loop, driven by the browser's animation
 // frame callback.
 {
+	g_WebInsideMainLoopTick = true;
 	// An exception escaping into the browser would silently kill the
 	// animation-frame chain; catch and report instead.
 	try {
@@ -94,6 +101,7 @@ static void	MainLoopIteration()
 
 		if (Main::GetQuit()) {
 			emscripten_cancel_main_loop();
+			g_WebInsideMainLoopTick = false;
 			return;
 		}
 
@@ -128,6 +136,7 @@ static void	MainLoopIteration()
 		printf("web mainloop: caught unknown exception\n");
 		emscripten_cancel_main_loop();
 	}
+	g_WebInsideMainLoopTick = false;
 }
 #endif // __EMSCRIPTEN__
 

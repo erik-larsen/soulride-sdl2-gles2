@@ -86,6 +86,11 @@ uint64	GetFastTicks()
 #include <sys/types.h>
 #include <unistd.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+extern bool	g_WebInsideMainLoopTick;	// defined in linuxmain.cpp
+#endif
+
 
 namespace Timer {
 ;
@@ -123,7 +128,17 @@ void	Sleep(uint32 milliseconds)
 // Sleeps for the specified number of milliseconds.
 {
 #ifdef __EMSCRIPTEN__
-	// Can't block the browser; requestAnimationFrame paces us.
+	// During startup (outside the browser-driven main loop), yield
+	// so the browser can paint and stay responsive.  Inside the main
+	// loop callback, sleeping is neither legal nor needed --
+	// requestAnimationFrame paces us.  Skipped in hidden tabs, where
+	// timers are throttled to ~1Hz.
+	int	hidden = EM_ASM_INT({
+		return (typeof document !== 'undefined' && document.visibilityState === 'hidden') ? 1 : 0;
+	});
+	if (!::g_WebInsideMainLoopTick && !hidden) {
+		emscripten_sleep(milliseconds);
+	}
 #else
 	struct timeval	tv;
 	tv.tv_sec = int(milliseconds / 1000);

@@ -15,7 +15,9 @@ endif()
 if(EMSCRIPTEN)
   # SDL2 / SDL2_mixer come from the Emscripten ports system; the USE
   # flags are needed at compile time for the include paths too.
-  add_compile_options(-sUSE_SDL=2 -sUSE_SDL_MIXER=2 -fexceptions)
+  # Native wasm exceptions (not JS-based): required for JSPI, and
+  # faster besides.
+  add_compile_options(-sUSE_SDL=2 -sUSE_SDL_MIXER=2 -fwasm-exceptions)
 else()
   find_package(SDL2 REQUIRED CONFIG)
   find_package(SDL2_mixer REQUIRED CONFIG)
@@ -72,12 +74,17 @@ if(EMSCRIPTEN)
   target_link_options(soulride PRIVATE
     -sUSE_SDL=2
     -sUSE_SDL_MIXER=2
-    -fexceptions
+    -fwasm-exceptions
     -sALLOW_MEMORY_GROWTH=1
     -sMAX_WEBGL_VERSION=1
     -sSTACK_SIZE=1048576
     -lidbfs.js
     -sEXPORTED_RUNTIME_METHODS=FS
+    # JSPI (Asyncify 2) lets the synchronous mountain load yield to
+    # the browser (Timer::Sleep / Game::LoadingTick), keeping the page
+    # responsive -- with native stack switching instead of Asyncify's
+    # slow whole-program instrumentation.
+    -sJSPI
     "SHELL:--preload-file ${CMAKE_CURRENT_SOURCE_DIR}/data@/data"
     "SHELL:--preload-file ${CMAKE_CURRENT_SOURCE_DIR}/Recordings@/Recordings"
     "SHELL:--preload-file ${CMAKE_CURRENT_SOURCE_DIR}/config.txt@/config.txt"
