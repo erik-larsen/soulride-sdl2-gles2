@@ -278,6 +278,10 @@ void	Log(const char* buf)
 	strncpy(Buffer[ActiveLine], buf, ConsoleWidth-1);
 	Buffer[ActiveLine][ConsoleWidth-1] = 0;
 
+	// Echo to stdout, so console messages show up in terminal logs.
+	fputs(Buffer[ActiveLine], stdout);
+	fputs("\n", stdout);
+
 	ActiveLine = (ActiveLine + 1) % ConsoleMaxLines;
 	strcpy(Buffer[ActiveLine], "> ");	// prompt.
 }
@@ -297,6 +301,12 @@ void	Printf(const char* fmt, ...)
 	vsnprintf(Buffer[ActiveLine], ConsoleWidth-1, fmt, ap);
 	va_end(ap);
 	Buffer[ActiveLine][ConsoleWidth-1] = 0;
+
+	// Echo to stdout, so console messages show up in terminal logs.
+	fputs(Buffer[ActiveLine], stdout);
+	if (*Buffer[ActiveLine] == 0 || Buffer[ActiveLine][strlen(Buffer[ActiveLine]) - 1] != '\n') {
+		fputs("\n", stdout);
+	}
 
 	ActiveLine = (ActiveLine + 1) % ConsoleMaxLines;
 	strcpy(Buffer[ActiveLine], "> ");	// prompt.

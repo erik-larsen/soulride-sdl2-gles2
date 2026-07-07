@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soul Ride</title>
+  <style>
+    :root {
+      --snow: #eef4fb;
+      --ice: #9fc3e8;
+      --night: #0b1420;
+      --panel: #101d2e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      background: linear-gradient(180deg, #0b1420 0%, #12243a 55%, #1b3a5c 100%);
+      color: var(--snow);
+      font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100%;
+    }
+    header {
+      padding: 18px 0 6px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 6px;
+      text-transform: lowercase;
+      color: var(--snow);
+      text-shadow: 0 2px 12px rgba(64, 128, 200, 0.6);
+    }
+    header p {
+      color: var(--ice);
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+    nav {
+      margin: 10px 0 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    nav a {
+      color: var(--ice);
+      text-decoration: none;
+      font-size: 13px;
+      padding: 5px 12px;
+      border: 1px solid rgba(159, 195, 232, 0.35);
+      border-radius: 999px;
+      transition: background 0.15s, color 0.15s;
+    }
+    nav a:hover { background: rgba(159, 195, 232, 0.15); }
+    nav a.current {
+      background: var(--ice);
+      color: var(--night);
+      font-weight: 600;
+    }
+    #frame {
+      position: relative;
+      width: min(800px, 96vw);
+      aspect-ratio: 4 / 3;
+      background: #000;
+      border: 1px solid rgba(159, 195, 232, 0.25);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.55);
+    }
+    canvas#canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      outline: none;
+      image-rendering: auto;
+    }
+    #loader {
+      position: absolute;
+      inset: 0;
+      background: var(--night);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transition: opacity 0.4s;
+    }
+    #loader.done { opacity: 0; pointer-events: none; }
+    #loader .title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 5px;
+      color: var(--snow);
+    }
+    #progress {
+      width: 60%;
+      max-width: 340px;
+      height: 6px;
+      background: rgba(159, 195, 232, 0.18);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    #progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--ice);
+      border-radius: 999px;
+      transition: width 0.2s;
+    }
+    #status {
+      color: var(--ice);
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      min-height: 1em;
+    }
+    footer {
+      padding: 12px 16px 20px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(238, 244, 251, 0.55);
+      line-height: 1.7;
+      max-width: 720px;
+    }
+    footer .keys { color: var(--ice); }
+    footer a { color: var(--ice); }
+    kbd {
+      background: rgba(159, 195, 232, 0.15);
+      border: 1px solid rgba(159, 195, 232, 0.3);
+      border-radius: 4px;
+      padding: 0 5px;
+      font-family: inherit;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>soul ride</h1>
+    <p>physics-based snowboarding &middot; real mountains &middot; est. 2000</p>
+  </header>
+
+  <nav id="mountains">
+    <a href="?mountain=testing" data-mtn="testing">Testing</a>
+    <a href="?mountain=Breckenridge" data-mtn="Breckenridge">Breckenridge</a>
+    <a href="?mountain=Jay_Peak" data-mtn="Jay_Peak">Jay Peak</a>
+    <a href="?mountain=Stratton" data-mtn="Stratton">Stratton</a>
+  </nav>
+
+  <div id="frame">
+    <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+    <div id="loader">
+      <div class="title">soul ride</div>
+      <div id="progress"><div id="progress-fill"></div></div>
+      <div id="status">warming up&hellip;</div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="keys">
+      <kbd>&larr;</kbd><kbd>&rarr;</kbd> carve &middot;
+      <kbd>&uarr;</kbd><kbd>&darr;</kbd> speed &middot;
+      <kbd>Space</kbd> jump &middot;
+      <kbd>Esc</kbd> menu &middot;
+      <kbd>Enter</kbd> select &middot; mouse steers too
+    </span><br>
+    Soul Ride &copy; 2003 Slingshot Game Technology &middot; GPLv2 &middot;
+    <a href="https://github.com/sgi-demos/soulride-sdl2-gles2">source</a> &middot;
+    progress &amp; highscores save in your browser
+  </footer>
+
+  <script>
+    var loaderEl = document.getElementById('loader');
+    var statusEl = document.getElementById('status');
+    var fillEl = document.getElementById('progress-fill');
+
+    // Highlight the selected mountain.
+    (function () {
+      var mtn = new URLSearchParams(location.search).get('mountain') || 'testing';
+      var links = document.querySelectorAll('#mountains a');
+      for (var i = 0; i < links.length; i++) {
+        if (links[i].getAttribute('data-mtn') === mtn) links[i].className = 'current';
+      }
+    })();
+
+    var Module = {
+      canvas: (function () {
+        var canvas = document.getElementById('canvas');
+        canvas.addEventListener('webglcontextlost', function (e) {
+          alert('WebGL context lost. Please reload the page.');
+          e.preventDefault();
+        }, false);
+        return canvas;
+      })(),
+
+      setStatus: function (text) {
+        // Emscripten reports "Downloading data... (loaded/total)".
+        var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+        if (m) {
+          fillEl.style.width = (parseInt(m[2]) / parseInt(m[4]) * 100) + '%';
+          statusEl.textContent = 'downloading mountains…';
+        } else if (text) {
+          statusEl.textContent = text.toLowerCase();
+        } else {
+          // Empty status == running.  The game still spends a while
+          // loading the mountain synchronously; leave a hint up and
+          // hide the loader on the first real frame.
+          fillEl.style.width = '100%';
+          statusEl.textContent = 'building the mountain… (can take a minute)';
+          Module.__waitFirstFrame();
+        }
+      },
+
+      __waitFirstFrame: function () {
+        // Hide the loader once the main loop is actually rendering.
+        var raf = function () {
+          if (Module.__started) {
+            loaderEl.className = 'done';
+          } else {
+            setTimeout(raf, 300);
+          }
+        };
+        setTimeout(raf, 300);
+      },
+
+      print: function (text) { console.log(text); },
+      printErr: function (text) { console.warn(text); }
+    };
+
+    // The game calls emscripten_set_main_loop after startup; first
+    // iteration marks us as started.
+    Module.preRun = Module.preRun || [];
+    Module.postRun = Module.postRun || [];
+    Module.postRun.push(function () { Module.__started = true; });
+  </script>
+  {{{ SCRIPT }}}
+</body>
+</html>

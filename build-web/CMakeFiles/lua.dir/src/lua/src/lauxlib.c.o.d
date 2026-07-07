@@ -1,0 +1,33 @@
+CMakeFiles/lua.dir/src/lua/src/lauxlib.c.o: \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/src/lauxlib.c \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/stdarg.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdarg.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdarg.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stdarg_header_macro.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stdarg___gnuc_va_list.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stdarg_va_list.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stdarg_va_arg.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stdarg___va_copy.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stdarg_va_copy.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdio.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/wasi/api.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stddef.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stddef.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_header_macro.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_ptrdiff_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_size_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_wchar_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_null.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_max_align_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_offsetof.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdint.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdint.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/alltypes.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/stdint.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/features.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/string.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/string.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/strings.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/include/lauxlib.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/include/lua.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/include/luadebug.h

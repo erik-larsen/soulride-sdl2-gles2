@@ -334,11 +334,7 @@ class GG_Act_TextBox : public GG_Act_TextLine
 #include <windows.h>
 #endif // not LINUX
 
-#ifndef MACOSX
-#include <GL/gl.h>
-#else
-#include <OpenGL/gl.h>
-#endif // not MACOSX
+#include "../srgl.hpp"
 
 
 class GG_Act_Poly : public GG_Actor
@@ -392,14 +388,19 @@ class GG_Act_Poly : public GG_Actor
 //  #endif
 
 //
-//  DirectSound Buffer actor
+//  Sound actor (DirectSound buffer on Windows, app-supplied
+//  GG_SoundBuffer elsewhere)
 //
+class GG_SoundBuffer;
+
 class GG_Act_Sound : public GG_Actor
 {
   protected:
     char                    m_fileName[256];
 #ifndef LINUX
     LPDIRECTSOUNDBUFFER     m_dsSoundBuf;
+#else
+    GG_SoundBuffer          *m_sndBuf;
 #endif // not LINUX
     float                   m_volume;             //  Previous volume setting
     bool                    m_bLooping;           //  Sound is currently looping

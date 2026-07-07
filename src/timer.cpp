@@ -122,10 +122,14 @@ uint32	GetTicks()
 void	Sleep(uint32 milliseconds)
 // Sleeps for the specified number of milliseconds.
 {
+#ifdef __EMSCRIPTEN__
+	// Can't block the browser; requestAnimationFrame paces us.
+#else
 	struct timeval	tv;
 	tv.tv_sec = int(milliseconds / 1000);
 	tv.tv_usec = (milliseconds - tv.tv_sec * 1000) * 1000;
 	select(0, NULL, NULL, NULL, &tv);
+#endif
 }
 
 

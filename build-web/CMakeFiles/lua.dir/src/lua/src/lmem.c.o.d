@@ -1,0 +1,20 @@
+CMakeFiles/lua.dir/src/lua/src/lmem.c.o: \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/src/lmem.c \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdlib.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/features.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/alltypes.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/alloca.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/src/lmem.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/src/lstate.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/setjmp.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/setjmp.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/src/lobject.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/limits.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/limits.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/limits.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/include/lua.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/string.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/string.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/strings.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/lua/include/luadebug.h

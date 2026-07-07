@@ -24,13 +24,13 @@
 
 
 #include <SDL.h>
-#include <X11/X.h>
-#include <X11/keysym.h>
-#include <GL/glx.h>
-#include <GL/gl.h>
 #include <unistd.h>
 #include <string.h>
 #include <new>
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 #include "main.hpp"
 #include "linuxmain.hpp"
@@ -43,6 +43,8 @@
 
 
 void	ProcessEvent(SDL_Event* event);
+
+extern SDL_Window*	g_GameWindow;	// defined in oglrender.cpp
 
 
 static float	MouseX = 0;
@@ -77,6 +79,59 @@ static void	MeasureMouseSpeed()
 }
 
 
+#ifdef __EMSCRIPTEN__
+static void	MainLoopIteration()
+// One iteration of the game loop, driven by the browser's animation
+// frame callback.
+{
+	// An exception escaping into the browser would silently kill the
+	// animation-frame chain; catch and report instead.
+	try {
+		SDL_Event	event;
+		while (SDL_PollEvent(&event)) {
+			ProcessEvent(&event);
+		}
+
+		if (Main::GetQuit()) {
+			emscripten_cancel_main_loop();
+			return;
+		}
+
+		if (Main::GetPaused() == false && GameLoop::GetIsOpen() == true) {
+			// Compute mouse speed and notify Input::
+			MeasureMouseSpeed();
+
+			GameLoop::Update();
+		}
+
+		// Periodically flush /PlayerData (profiles, highscores) to
+		// IndexedDB.  syncfs diffs mtimes, so idle syncs are cheap.
+		{
+			static Uint32	LastSyncTicks = 0;
+			Uint32	now = SDL_GetTicks();
+			if (now - LastSyncTicks > 10000) {
+				LastSyncTicks = now;
+				EM_ASM({
+					if (!Module.srSyncing) {
+						Module.srSyncing = true;
+						FS.syncfs(false, function() { Module.srSyncing = false; });
+					}
+				});
+			}
+		}
+	}
+	catch (Error& e) {
+		printf("web mainloop: caught Error: %s\n", e.GetMessage());
+		emscripten_cancel_main_loop();
+	}
+	catch (...) {
+		printf("web mainloop: caught unknown exception\n");
+		emscripten_cancel_main_loop();
+	}
+}
+#endif // __EMSCRIPTEN__
+
+
 int	main(int argc, char** argv)
 // Main program entry point for Soul Ride.
 {
@@ -88,15 +143,13 @@ int	main(int argc, char** argv)
 
 	// Init SDL.
 	int	result;
-	result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_CDROM | SDL_INIT_AUDIO);
+	result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO);
 	if (result == -1) {
 		printf("Couldn't initialize SDL: %s\n", SDL_GetError());
 	}
 
-	// Enable Unicode translation.
-        SDL_EnableUNICODE(1);
-
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+	// Get SDL_TEXTINPUT events for typed characters.
+	SDL_StartTextInput();
 
 	// Don't show the OS mouse cursor.  We draw our own when necessary.
 	SDL_ShowCursor(SDL_DISABLE);
@@ -123,6 +176,17 @@ int	main(int argc, char** argv)
 		// Start up 3D and load the game data.
 		GameLoop::Open();
 
+#ifdef __EMSCRIPTEN__
+		printf("startup complete, entering web main loop\n");
+		// The browser owns the loop; one iteration per animation
+		// frame.  Register the callback and return from main() --
+		// simulating an infinite loop here would throw 'unwind'
+		// through this try block and break the loop registration.
+		// The Emscripten runtime stays alive after main() returns
+		// (EXIT_RUNTIME=0), so cleanup below is deliberately skipped.
+		emscripten_set_main_loop(MainLoopIteration, 0, 0);
+		return 0;
+#else
 		while (!Main::GetQuit()) {
 			SDL_Event	event;
 			if (SDL_PollEvent(&event)) {
@@ -139,6 +203,7 @@ int	main(int argc, char** argv)
 				SDL_WaitEvent(NULL);
 			}
 		}
+#endif
 	}
 	catch (std::bad_alloc) {
 		printf("Out Of Memory.\n");
@@ -184,7 +249,7 @@ int	main(int argc, char** argv)
 }
 
 
-static void	ProcessKeyEvent(SDL_keysym* keysym, bool Down);
+static void	ProcessKeyEvent(SDL_Keysym* keysym, bool Down);
 
 
 void	ProcessEvent(SDL_Event* event)
@@ -207,11 +272,33 @@ void	ProcessEvent(SDL_Event* event)
 
 		ProcessKeyEvent(&(key->keysym), key->type == SDL_KEYDOWN);
 
-		if (key->type == SDL_KEYDOWN && key->keysym.unicode < 0x80 && key->keysym.unicode > 0) {
-			// ASCII-ish key.  Pass it to the Input module.
-			Input::NotifyAlphaKeyClick(key->keysym.unicode);
+		// SDL2 delivers printable characters via SDL_TEXTINPUT; pass
+		// the control characters the game's text-entry code expects.
+		if (key->type == SDL_KEYDOWN) {
+			int	c = 0;
+			switch (key->keysym.sym) {
+			case SDLK_BACKSPACE: c = 8; break;
+			case SDLK_TAB: c = 9; break;
+			case SDLK_RETURN:
+			case SDLK_KP_ENTER: c = 13; break;
+			case SDLK_ESCAPE: c = 27; break;
+			default: break;
+			}
+			if (c) Input::NotifyAlphaKeyClick(c);
 		}
 
+		break;
+	}
+
+	case SDL_TEXTINPUT:
+	{
+		// ASCII-ish keys.  Pass them to the Input module.
+		for (const char* p = event->text.text; *p; p++) {
+			unsigned char	c = (unsigned char) *p;
+			if (c < 0x80) {
+				Input::NotifyAlphaKeyClick(c);
+			}
+		}
 		break;
 	}
 
@@ -247,7 +334,7 @@ void	ProcessEvent(SDL_Event* event)
 }
 
 
-static void	ProcessKeyEvent(SDL_keysym* keysym, bool Down)
+static void	ProcessKeyEvent(SDL_Keysym* keysym, bool Down)
 // Looks at the key symbol and sends a notification to the Input module if
 // the key matches one of the input buttons.
 // Down should be true when the key goes down or when it auto-repeats.  Down
@@ -255,7 +342,7 @@ static void	ProcessKeyEvent(SDL_keysym* keysym, bool Down)
 {
 	if (Main::GetQuit()) return;
 
-	SDLKey	key = keysym->sym;
+	SDL_Keycode	key = keysym->sym;
 
 	// Control keys.
 	if (key == SDLK_LCTRL || key == SDLK_RCTRL) {
@@ -280,16 +367,16 @@ static void	ProcessKeyEvent(SDL_keysym* keysym, bool Down)
 	case SDLK_LALT:
 		id = Input::BUTTON3; break;
 	case SDLK_LEFT:
-	case SDLK_KP4:
+	case SDLK_KP_4:
 		id = Input::LEFT1; break;
 	case SDLK_RIGHT:
-	case SDLK_KP6:
+	case SDLK_KP_6:
 		id = Input::RIGHT1; break;
 	case SDLK_UP:
-	case SDLK_KP8:
+	case SDLK_KP_8:
 		id = Input::UP1; break;
 	case SDLK_DOWN:
-	case SDLK_KP2:
+	case SDLK_KP_2:
 		id = Input::DOWN1; break;
 	case SDLK_RETURN:
 	case SDLK_KP_ENTER:
@@ -318,34 +405,34 @@ static void	ProcessKeyEvent(SDL_keysym* keysym, bool Down)
 		int	c = 0;
 		switch (key) {
 		case SDLK_INSERT:
-		case SDLK_KP0:
+		case SDLK_KP_0:
 			c = 128; break;
 				
 		case SDLK_END:
-		case SDLK_KP1:
+		case SDLK_KP_1:
 			c = 129; break;
 		case SDLK_DOWN:
-		case SDLK_KP2:
+		case SDLK_KP_2:
 			c = 130; break;
 		case SDLK_PAGEDOWN:
-		case SDLK_KP3:
+		case SDLK_KP_3:
 			c = 131; break;	// pg dn
 
 		case SDLK_LEFT:
-		case SDLK_KP4:
+		case SDLK_KP_4:
 			c = 132; break;
 		case SDLK_RIGHT:
-		case SDLK_KP6:
+		case SDLK_KP_6:
 			c = 134; break;
 
 		case SDLK_HOME:
-		case SDLK_KP7:
+		case SDLK_KP_7:
 			c = 135; break;
 		case SDLK_UP:
-		case SDLK_KP8:
+		case SDLK_KP_8:
 			c = 136; break;
 		case SDLK_PAGEUP:
-		case SDLK_KP9:
+		case SDLK_KP_9:
 			c = 137; break;	// pg up
 				   
 		case SDLK_DELETE:
@@ -382,7 +469,9 @@ void	CenterMouse()
 {
 	int	x = Render::GetWindowWidth() >> 1;
 	int	y = Render::GetWindowHeight() >> 1;
-	SDL_WarpMouse(x, y);
+	if (::g_GameWindow) {
+		SDL_WarpMouseInWindow(::g_GameWindow, x, y);
+	}
 
 	// Update some mouse-speed measuring state to prevent it from
 	// considering this synthetic move a real mouse motion.

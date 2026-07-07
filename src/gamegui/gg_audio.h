@@ -41,6 +41,22 @@
 #define GGA_ERR_NODIRECTSOUND  -100   //  In addition to standard return codes in gamegui.h
 
 
+#ifdef LINUX
+//  On non-Windows platforms, the loadSound callback returns one of
+//  these (instead of an LPDIRECTSOUNDBUFFER).  The app implements it
+//  with whatever audio backend it uses (SDL2_mixer in Soul Ride).
+//  The GG_Act_Sound actor owns the returned object and deletes it.
+class GG_SoundBuffer
+{
+  public:
+    virtual ~GG_SoundBuffer()  {}
+    virtual void play( bool bLoop ) = 0;
+    virtual void stop(void) = 0;
+    virtual void setVolume( float vol ) = 0;    //  1.0 == full volume
+};
+#endif // LINUX
+
+
 struct GG_AudioSetup
 {
   void *hWnd;             //  This allows you to not include <windows.h> at all

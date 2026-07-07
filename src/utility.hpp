@@ -50,7 +50,7 @@ T	tmin(T a, T b)
 	else return b;
 }
 
-inline float	fmin(float a, float b) { return tmin(a, b); }
+// fmin/fmax come from C99 <math.h> nowadays.
 inline int	imin(int a, int b) { return tmin(a, b); }
 
 
@@ -62,7 +62,6 @@ T	tmax(T a, T b)
 	else return b;
 }
 
-inline float	fmax(float a, float b) { return tmax(a, b); }
 inline int	imax(int a, int b) { return tmax(a, b); }
 
 

@@ -41,11 +41,7 @@
 #include <windows.h>
 #endif // not LINUX
 
-#ifndef MACOSX
-#include <GL/gl.h>
-#else
-#include <OpenGL/gl.h>
-#endif
+#include "../srgl.hpp"
 
 
 static char msgBuf[256] = "";

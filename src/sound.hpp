@@ -30,6 +30,11 @@
 #include "error.hpp"
 
 
+#ifdef LINUX
+class GG_SoundBuffer;	// see gamegui/gg_audio.h
+#endif // LINUX
+
+
 namespace Sound {
 
 	// An exception class specific to the Sound:: module.
@@ -78,6 +83,13 @@ namespace Sound {
 	void	PlayCDTrack(int TrackID);
 	void	SetMusicVolume(uint8 vol);
 	void	GetCDDriveName(char* returnbuffer);
+
+#ifdef LINUX
+	// Loads a sound file (.wav or Sun .au) for the GameGUI movie
+	// player.  Returns NULL if sound is disabled or loading fails.
+	// Caller owns the returned object.
+	GG_SoundBuffer*	NewGGSoundBuffer(const char* filename);
+#endif // LINUX
 
 // macOS mp3/ogg playback instead of CD
 #ifdef MACOSX

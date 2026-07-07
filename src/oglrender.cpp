@@ -22,20 +22,24 @@
 // Rendering wrapper using OpenGL for rasterization.
 
 
-#ifdef MACOSX
-#include "macosxworkaround.hpp"
-#elif defined LINUX
+#ifdef LINUX
 
 #include <SDL.h>
-#include <GL/glx.h>
-//#include <X11/extensions/xf86vmode.h>
 #include "linuxmain.hpp"
 
-#else // not LINUX nor MACOSX
+#else // not LINUX
 
 #include <windows.h>
 #include "winmain.hpp"
 
+#endif // LINUX
+
+
+#ifdef LINUX
+// The SDL2 window and GL context, created in Render::OpenOGL().
+// Referenced from linuxmain.cpp (mouse warping).
+SDL_Window*	g_GameWindow = NULL;
+static SDL_GLContext	g_GLContext = NULL;
 #endif // LINUX
 
 #include <stdio.h>
@@ -507,101 +511,7 @@ const int	DesiredColorDepth = 16;
 
 #ifdef LINUX
 
-Display*	display = NULL;
-XVisualInfo	visual;
-Colormap	colormap;
-Window	window;
-GLXContext	context;
-//XF86VidModeModeInfo	original_mode;
-
-
-bool	AcceptableVisual(Display* display, XVisualInfo* v)
-// Returns true if the given X visual is acceptable for our purposes.
-{
-	int	value;
-
-	// Check ability to use OpenGL.
-	if (glXGetConfig(display, v, GLX_USE_GL, &value) || value == False) {
-		return false;
-	}
-
-	// Make sure rendering is at default frame buffer level.
-	if (glXGetConfig(display, v, GLX_LEVEL, &value) || value != 0) {
-		return false;
-	}
-
-	// Require double buffering.
-	if (glXGetConfig(display, v, GLX_DOUBLEBUFFER, &value) || value == False) {
-		return false;
-	}
-
-	// Has the necessary attributes.
-	return true;
-}
-
-
-int	CompareVisuals(Display* display, XVisualInfo* a, XVisualInfo* b)
-// Compares visuals a and b with respect to our desired use.  If b is better than a,
-// returns 1; if a is better than b, returns -1, else returns 0.
-{
-	// Assume they're both acceptable.  Go through and compare on basic criteria.
-
-	int	aval, bval;
-
-	// First compare RGBA vs. color index.
-	if (glXGetConfig(display, a, GLX_RGBA, &aval)) return 0;
-	if (glXGetConfig(display, b, GLX_RGBA, &bval)) return 0;
-	if (aval != bval) {
-		if (aval == True) return -1;
-		else return 1;
-	}
-
-	// Try for the desired color depth.
-	if (glXGetConfig(display, a, GLX_BUFFER_SIZE, &aval)) return 0;
-	if (glXGetConfig(display, b, GLX_BUFFER_SIZE, &bval)) return 0;
-	if (aval != bval) {
-		if (aval == DesiredColorDepth) return -1;
-		if (bval == DesiredColorDepth) return 1;
-		if (aval > bval) return -1;
-		else return 1;
-	}
-
-	// xxx try for desired alpha depth xxx
-	// xxx try for desired stencil depth xxx
-	// xxx try for desired accum depth xxx
-
-	// Make sure we have at least DesiredZDepth bits of z-buffer.
-	if (glXGetConfig(display, a, GLX_DEPTH_SIZE, &aval)) return 0;
-	if (glXGetConfig(display, b, GLX_DEPTH_SIZE, &bval)) return 0;
-	if (aval != bval) {
-		if (aval == DesiredZDepth) return -1;
-		if (bval == DesiredZDepth) return 1;
-		if (aval > bval) return -1;
-		else return 1;
-	}
-	
-	// Avoid some oddball buffer types.
-
-	// Avoid stereo.
-	if (glXGetConfig(display, a, GLX_STEREO, &aval)) return 0;
-	if (glXGetConfig(display, b, GLX_STEREO, &bval)) return 0;
-	if (aval != bval) {
-		if (aval == False) return -1;
-		else return 1;
-	}
-
-	// Avoid aux buffers.
-	if (glXGetConfig(display, a, GLX_AUX_BUFFERS, &aval)) return 0;
-	if (glXGetConfig(display, b, GLX_AUX_BUFFERS, &bval)) return 0;
-	if (aval != bval) {
-		if (aval < bval) return -1;
-		else return 1;
-	}
-
-	// Formats seem the same for our purposes.
-	return 0;
-}
-
+// SDL2 chooses the GL visual/pixel format for us; nothing needed here.
 
 #else // not LINUX
 
@@ -744,27 +654,41 @@ void	OpenOGL()
 
 #ifdef LINUX
 
-	const SDL_VideoInfo* info = NULL;
-	info = SDL_GetVideoInfo();
-	if (!info) {
-		Error e; e << "SDL_GetVideoInfo() failed.";
-		throw e;
-	}
-
-	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
+	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
+	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 24 );
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
 	ModeInfo&	m = Mode[CurrentMode];
-	int	bpp = info->vfmt->BitsPerPixel;
-	int	flags = SDL_OPENGL | (Fullscreen ? SDL_FULLSCREEN : 0);
+	Uint32	flags = SDL_WINDOW_OPENGL | (Fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
 
-	// Set the video mode.
-	if (SDL_SetVideoMode(m.Width, m.Height, bpp, flags) == 0) {
-		Error e; e << "SDL_SetVideoMode() failed.";
+	g_GameWindow = SDL_CreateWindow("Soul Ride",
+					SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+					m.Width, m.Height, flags);
+	if (g_GameWindow == NULL) {
+		Error e; e << "SDL_CreateWindow() failed: " << SDL_GetError();
 		throw e;
+	}
+
+	g_GLContext = SDL_GL_CreateContext(g_GameWindow);
+	if (g_GLContext == NULL) {
+		Error e; e << "SDL_GL_CreateContext() failed: " << SDL_GetError();
+		throw e;
+	}
+
+	// Set up the srgl fixed-function-over-GLES2 shim.
+	if (srglInit() == false) {
+		Error e; e << "srglInit() failed -- couldn't set up GL shim.";
+		throw e;
+	}
+
+	// Vsync on by default for smooth frame pacing on modern
+	// machines; set VSync=0 in config to disable.
+	{
+		int	vsync = 1;
+		if (Config::GetValue("VSync")) vsync = Config::GetBool("VSync") ? 1 : 0;
+		SDL_GL_SetSwapInterval(vsync);
 	}
 
 #else // not LINUX
@@ -869,16 +793,22 @@ void	CloseOGL()
 // Close the OpenGL rendering context, and do other cleanup.
 {
 #ifdef LINUX
+	if (g_GLContext) {
+		srglShutdown();
+		SDL_GL_DeleteContext(g_GLContext);
+		g_GLContext = NULL;
+	}
+	if (g_GameWindow) {
+		SDL_DestroyWindow(g_GameWindow);
+		g_GameWindow = NULL;
+	}
 #else // not LINUX
 	bool	Result = OGL::MakeCurrent(NULL, NULL);
 	if (Result == false) {
 		RenderError e; e << "CloseOGL(): OGL::MakeCurrent failed.";
 		throw e;
 	}
-#endif // not LINUX
 
-#ifdef LINUX
-#else // not LINUX
 	Result = OGL::DeleteContext(RenderingContext);
 	if (Result == false) {
 		RenderError e; e << "CloseOGL(): OGL::DeleteContext failed.";
@@ -899,7 +829,7 @@ void	ShowFrame()
 // Show what's in the rendering frame.
 {
 #ifdef LINUX
-	SDL_GL_SwapBuffers( );
+	SDL_GL_SwapWindow(g_GameWindow);
 #else // not LINUX
 	bool	Result = OGL::SwapBuffers(GetDC(Main::GetGameWindow()));
 	if (Result == false) {
@@ -996,9 +926,12 @@ public:
 		
 		MIPMapped = MakeMIPMaps;
 
-		// Don't create any textures with dimensions > 256.  Otherwise
-		// we'll crash on old Voodoo cards.
-		while (b->GetHeight() >= 512 || b->GetWidth() > 256) {
+		// Cap texture dimensions.  This limit used to be 256 to avoid
+		// crashing old Voodoo cards, which shrank all the 512px art;
+		// 2048 is safe on anything GLES2-capable.  (Height allows 2x
+		// the width cap because pre-built mipmaps stack below the
+		// main image.)
+		while (b->GetHeight() >= 4096 || b->GetWidth() > 2048) {
 			int	sw = b->GetWidth();
 			int	sh = b->GetHeight();
 

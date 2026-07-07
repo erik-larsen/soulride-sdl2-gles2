@@ -1,0 +1,33 @@
+CMakeFiles/gamegui.dir/src/gamegui/gg_file.cpp.o: \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/gamegui/gg_file.cpp \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/gamegui/gg_file.h \
+  /Users/larsens/Github/soulride-sdl2-gles2/src/gamegui/gg_types.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stdio.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__config \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__config_site \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__configuration/abi.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__configuration/compiler.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__configuration/platform.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__configuration/availability.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__configuration/language.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdio.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/wasi/api.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/stddef.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stddef.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stddef.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_header_macro.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_ptrdiff_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_size_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_wchar_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_null.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_nullptr_t.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/__stddef_offsetof.h \
+  /Users/larsens/Github/emsdk/upstream/lib/clang/22/include/stdint.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/stdint.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/alltypes.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/bits/stdint.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/features.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/compat/string.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/string.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/string.h \
+  /Users/larsens/Github/emsdk/upstream/emscripten/cache/sysroot/include/strings.h

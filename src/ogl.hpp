@@ -84,17 +84,9 @@
 
 #endif // not LINUX
 
-#ifdef MACOSX
-#	include <OpenGL/gl.h>
-#else
-#	include <GL/gl.h>
-#endif
-	
-
-extern "C" {
-void	glLockArraysEXT(GLint first, GLsizei count);
-void	glUnlockArraysEXT(void);
-};
+// All GL calls go through the srgl shim (fixed-function GL 1.x over
+// the GLES2 API subset).
+#include "srgl.hpp"
 
 
 #define GL_TEXTURE_FILTER_CONTROL_EXT	0x8500

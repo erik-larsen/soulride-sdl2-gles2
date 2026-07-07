@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "soulride-web",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8642", "--directory", "build-web"],
+      "port": 8642
+    }
+  ]
+}

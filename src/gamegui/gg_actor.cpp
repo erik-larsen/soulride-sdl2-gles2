@@ -32,6 +32,7 @@
 #include "gg_string.h"
 #include "gg_psdread.h"
 #include "gg_log.h"
+#include "gg_audio.h"
 
 static const float GG_ACTOR_VOLUME_TOLERANCE = 0.01f;    //  Only call DS::SetVolume on changes of 1% or more
 
@@ -1026,6 +1027,8 @@ GG_Act_Sound::GG_Act_Sound(GG_CallbackFn_LoadSound sndLoader, void *slObj)
   m_fileName[0] = '\0';
 #ifndef LINUX
   m_dsSoundBuf = NULL;
+#else
+  m_sndBuf = NULL;
 #endif // not LINUX
   m_fnSoundLoader = sndLoader;
   m_soundLoaderObj = slObj;
@@ -1041,6 +1044,12 @@ GG_Act_Sound::~GG_Act_Sound()
   {
     m_dsSoundBuf->Stop();
     m_dsSoundBuf->Release();
+  }
+#else
+  if( m_sndBuf != NULL )
+  {
+    m_sndBuf->stop();
+    delete m_sndBuf;
   }
 #endif // not LINUX
 }
@@ -1093,14 +1102,20 @@ GG_Rval GG_Act_Sound::read( GG_File *f )
 
       sprintf( fileName, "%s%s", path, wordBuf );   //  Build full name manually
 
-#ifndef LINUX
+#ifdef LINUX
+      GG_SoundBuffer *sndBuf = NULL;
+#endif // LINUX
+
       if( m_fnSoundLoader != null )
       {
         //  Load the sound, using the app-supplied loader callback
+#ifndef LINUX
         rval = m_fnSoundLoader(m_soundLoaderObj, fileName, (void**)&dsBuf);
+#else
+        rval = m_fnSoundLoader(m_soundLoaderObj, fileName, (void**)&sndBuf);
+#endif // not LINUX
       }
       else
-#endif // not LINUX
         rval = GG_OK;
 
       GG_File::setCurrentPath(path);    //  Restore path setting
@@ -1119,8 +1134,13 @@ GG_Rval GG_Act_Sound::read( GG_File *f )
         m_dsSoundBuf->AddRef();
       }
       else
-#endif // not LINUX
         m_duration = 0;
+#else
+      if( m_sndBuf != NULL )      //  Junk any previously loaded sound
+        delete m_sndBuf;
+      m_sndBuf = sndBuf;          //  Save the new sound
+      m_duration = 0;
+#endif // not LINUX
       strcpy( m_fileName, wordBuf );    //  Remember its filename
       continue;
     }
@@ -1166,11 +1186,17 @@ GG_Rval GG_Act_Sound::doFrame( const GG_ActorState &state, int32 t0, int32 dt )
 #ifndef LINUX
     if( m_dsSoundBuf != NULL )
       m_dsSoundBuf->SetVolume((long)((m_volume - 1.0f) * fabs((float)(DSBVOLUME_MAX - DSBVOLUME_MIN))));
+#else
+    if( m_sndBuf != NULL )
+      m_sndBuf->setVolume(m_volume);
 #endif // not LINUX
   }
 
 #ifndef LINUX
   if( m_dsSoundBuf == NULL )
+    return GG_OK;
+#else
+  if( m_sndBuf == NULL )
     return GG_OK;
 #endif // not LINUX
 
@@ -1185,6 +1211,8 @@ GG_Rval GG_Act_Sound::doFrame( const GG_ActorState &state, int32 t0, int32 dt )
 
   DWORD flags = (state.playMode == GG_PLAYMODE_LOOP) ? DSBPLAY_LOOPING : 0;
   m_dsSoundBuf->Play( 0, 0, flags );
+#else
+  m_sndBuf->play( state.playMode == GG_PLAYMODE_LOOP );
 #endif // not LINUX
 
   if( state.playMode == GG_PLAYMODE_LOOP )
@@ -1201,6 +1229,9 @@ void GG_Act_Sound::stop(void)
 #ifndef LINUX
   if( m_dsSoundBuf != NULL )
     m_dsSoundBuf->Stop();
+#else
+  if( m_sndBuf != NULL )
+    m_sndBuf->stop();
 #endif // not LINUX
   m_bLooping = false;
 }

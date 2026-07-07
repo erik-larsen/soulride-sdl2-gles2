@@ -80,6 +80,7 @@ static GG_Callbacks	GUICallbacks;
 
 //  Sound loader callback, supplied to GameGUI
 //
+#ifndef LINUX
 static GG_Rval loadSndCallback( void *appObj, char *fileName, void **dsSnd )
 {
 	GG_Audio *audio = (GG_Audio *)appObj;
@@ -87,13 +88,29 @@ static GG_Rval loadSndCallback( void *appObj, char *fileName, void **dsSnd )
 	if( (snd = audio->createSound(fileName)) == null )
 		return GG_ERR;
 	*dsSnd = snd->getDSSoundBuffer1();
-	
+
 	//  Note that we didn't destroy the GG_Sound object we created here!
 	//  Gonna let it slide, and allow the destruction of audio to take
 	//  care of it in the main loop.
-	
+
 	return GG_OK;
 }
+#else // LINUX
+static GG_Rval loadSndCallback( void *appObj, char *fileName, void **sndBuf )
+{
+	// Load through the Sound:: module (SDL2_mixer).  The actor owns
+	// the returned GG_SoundBuffer.
+	GG_SoundBuffer*	snd = Sound::NewGGSoundBuffer(fileName);
+	if (snd == NULL) {
+		// Sound may be disabled, or the file may be missing; let the
+		// movie play silently rather than failing the load.
+		*sndBuf = NULL;
+		return GG_OK;
+	}
+	*sndBuf = snd;
+	return GG_OK;
+}
+#endif // LINUX
 
 
 //
@@ -197,6 +214,10 @@ void	Open()
 	}
 #else // LINUX
 	memset(&GUICallbacks, 0, sizeof(GUICallbacks));
+	if (Config::GetBoolValue("Sound") == true) {
+		GUICallbacks.loadSound = loadSndCallback;
+		GUICallbacks.loadSoundObj = NULL;
+	}
 #endif // LINUX
 	
 	
@@ -213,7 +234,10 @@ void	Open()
 	// Start input thread.
 	StopInputsThread = false;
 	AutoPauseInput	autoPause;	// Pause inputs through the remainder of this function.
-#ifdef LINUX
+#ifdef __EMSCRIPTEN__
+	// No input thread on the web; inputs are sampled synchronously
+	// at the top of GameLoop::Update().
+#elif defined(LINUX)
 	pthread_attr_t	Attr;
 	pthread_attr_init(&Attr);
 	pthread_t	InputThreadInfo;
@@ -256,6 +280,18 @@ void	Open()
 	// Load a test mountain.
 	const char*	mtn = Config::GetValue("DefaultMountain");
 	Game::LoadMountain(mtn);
+
+	// Cue the intro movie (logo + music).  Skippable via
+	// Enter/Escape, or entirely with SkipIntro=1.
+	if (Config::GetBoolValue("SkipIntro") == false) {
+		try {
+			CueMovie("intro.ggm");
+		}
+		catch (Error& e) {
+			// Missing/broken movie shouldn't block startup.
+			Console::Printf("Intro movie unavailable: %s\n", e.GetMessage());
+		}
+	}
 
 	IsOpen = true;
 }
@@ -893,9 +929,29 @@ void	SaveMovieFrame()
 }
 
 
+#ifdef __EMSCRIPTEN__
+bool	SampleInputsAndAddToBuffer();
+extern int	NextSampleTime;
+
+static void	PollInputsSynchronously()
+// The web build has no input-sampling thread; do the sampling inline
+// once its period has elapsed.
+{
+	if (PauseInputsThread > 0) return;
+	if (Timer::GetTicks() >= NextSampleTime) {
+		SampleInputsAndAddToBuffer();
+	}
+}
+#endif // __EMSCRIPTEN__
+
+
 void	Update()
 // Runs one iteration of the game loop.
 {
+#ifdef __EMSCRIPTEN__
+	PollInputsSynchronously();
+#endif
+
 	CurrentTicks = Timer::GetTicks() - StartTicks;
 	int	DeltaTicks = CurrentTicks - LastTicks;
 
@@ -1409,6 +1465,25 @@ void	Update()
 	if (fn) {
 		Render::WriteScreenshotFilePPM(fn);
 		Config::SetValue("SaveFramePPM", NULL);
+	}
+
+	// Debug aid: SR_SCREENSHOT=<prefix> dumps <prefix>NNNN.ppm every
+	// SR_SCREENSHOT_EVERY milliseconds (default 2000) so automated
+	// runs can verify rendering.
+	{
+		const char*	shot = getenv("SR_SCREENSHOT");
+		if (shot) {
+			static int	s_LastShotTicks = 0;
+			static int	s_ShotCount = 0;
+			const char*	fenv = getenv("SR_SCREENSHOT_EVERY");
+			int	interval = fenv ? atoi(fenv) : 2000;
+			if (CurrentTicks - s_LastShotTicks >= interval) {
+				s_LastShotTicks = CurrentTicks;
+				char	buf[1000];
+				snprintf(buf, sizeof(buf), "%s%04d.ppm", shot, s_ShotCount++);
+				Render::WriteScreenshotFilePPM(buf);
+			}
+		}
 	}
 	
 	} // end of two player display
