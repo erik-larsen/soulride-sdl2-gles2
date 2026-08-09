@@ -1,5 +1,7 @@
 # Soul Ride #
 
+![screenshot](media/screenshot.jpg)
+
 *This is a port of Soul Ride to SDL2 and OpenGLES2, with cross-platform native and web builds.*
 
 Welcome to **Soul Ride**, a GPL physics-based snowboarding simulator, with an
