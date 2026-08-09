@@ -150,6 +150,18 @@ int	main(int argc, char** argv)
 	// Print the program title and version.
 	printf("Soul Ride %s\n(c) Copyright 2003 Slingshot Game Technology\nhttp://soulride.com\n", Main::GetVersionString());
 
+#ifdef __EMSCRIPTEN__
+	// SDL's Emscripten_GLES_SwapWindow follows every swap with an
+	// emscripten_sleep(0) when asyncify/JSPI is linked in.  That
+	// suspend is legal inside promising-wrapped main() (the long
+	// synchronous load), but the rAF-driven main loop callback is not
+	// promising-wrapped, so the first in-loop swap throws SuspendError
+	// and kills the animation-frame chain.  We already yield
+	// explicitly during the load (Timer::Sleep / Game::LoadingTick),
+	// so SDL's implicit swap yield is unnecessary -- disable it.
+	SDL_SetHint(SDL_HINT_EMSCRIPTEN_ASYNCIFY, "0");
+#endif
+
 	// Init SDL.
 	int	result;
 	result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO);
