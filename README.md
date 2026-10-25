@@ -1,8 +1,7 @@
 # [Soul Ride](https://erik-larsen.github.io/soulride-sdl2-gles2/) #
+*A port of Thatcher Ulrich's Soul Ride to SDL2 and OpenGLES2, with cross-platform native and web builds.*
 
 ![screenshot](media/screenshot.jpg)
-
-*A port of Thatcher Ulrich's Soul Ride to SDL2 and OpenGLES2, with cross-platform native and web builds.*
 
 Welcome to **Soul Ride**, a GPL physics-based snowboarding simulator, with an
 advanced terrain engine designed for rendering real-world locations!
